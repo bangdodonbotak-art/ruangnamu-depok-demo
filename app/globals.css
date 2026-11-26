@@ -1,53 +1,134 @@
 @import "tailwindcss";
 
+/*
+ * Ruangnamu v2 design tokens — the ONLY file in the repo that may contain
+ * hex colour literals. Tokens sampled against the final shipped stills
+ * (26 Nov 2026): garden green ≈ Joglo Green, RedRoom red ≈ Awning Red,
+ * Joglo timber ≈ Wood, warm paper ≈ Paper. All six hold; no change needed.
+ */
 @theme {
-  --color-bg: #F6F4EF;
-  --color-surface: #ECE8DF;
-  --color-ink: #1A1E1B;
-  --color-muted: #58605A;
-  --color-accent: #2F5D50;
-  --color-accent-ink: #F6F4EF;
-  --color-line: #D7D1C5;
+  --color-paper: #f6f4ef;
+  --color-ink: #1a1e1b;
+  --color-joglo: #2f5d50;
+  --color-awning: #a63a2b;
+  --color-wood: #8c6a48;
+  --color-muted: #58605a;
 
-  --font-display: "Fraunces", Georgia, serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-sans: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+
+  --color-line: color-mix(in srgb, var(--color-ink) 12%, var(--color-paper));
+  --color-line-on-ink: color-mix(in srgb, var(--color-paper) 16%, var(--color-ink));
 }
 
-@layer base {
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Type scale — Fraunces display, Plus Jakarta Sans body. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  font-weight: 600;
+}
+
+.display-xl {
+  font-size: clamp(2.75rem, 6vw, 5.125rem);
+  line-height: 1.02;
+}
+
+.display-lg {
+  font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+  line-height: 1.08;
+}
+
+.display-md {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.1;
+}
+
+.body-lg {
+  font-size: 1.125rem;
+  line-height: 1.55;
+}
+
+.body-base {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Section rhythm: 80 / 120 / 160px desktop, 56 / 80px mobile. */
+.section-pad {
+  padding-top: clamp(3.5rem, 8vw, 10rem);
+  padding-bottom: clamp(3.5rem, 8vw, 10rem);
+}
+
+.section-pad-tight {
+  padding-top: clamp(3.5rem, 6vw, 5rem);
+  padding-bottom: clamp(3.5rem, 6vw, 5rem);
+}
+
+/* Focus visibility on every interactive element. */
+:focus-visible {
+  outline: 3px solid var(--color-joglo);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Checkbox / radio accent uses the Joglo token (no hex in components). */
+.accent-joglo {
+  accent-color: var(--color-joglo);
+}
+
+footer :focus-visible,
+.bg-ink :focus-visible {
+  outline-color: var(--color-paper);
+}
+
+/* Photo treatment: portrait-native stills, no captions, hover zoom only. */
+.photo-frame {
+  overflow: hidden;
+  background-color: var(--color-line);
+}
+
+.photo-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 300ms ease-out;
+}
+
+@media (hover: hover) {
+  .photo-frame:hover img {
+    transform: scale(1.02);
+  }
+}
+
+/* Reduced motion: everything static. No animation, no smooth scroll,
+   no transition anywhere on the page. */
+@media (prefers-reduced-motion: reduce) {
   html {
-    background-color: var(--color-bg);
-    color: var(--color-ink);
-    font-family: var(--font-sans);
     scroll-behavior: auto;
   }
 
-  body {
-    overflow-x: clip;
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  h1,
-  h2,
-  h3 {
-    font-family: var(--font-display);
-    line-height: 1.08;
-    letter-spacing: -0.03em;
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 3px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+    transition-delay: 0ms !important;
   }
 }

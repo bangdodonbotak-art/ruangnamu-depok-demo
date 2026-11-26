@@ -1,86 +1,90 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SITE_DATA } from "@/lib/site-data";
 
-const NAV_LINKS = [
-  { href: "#story", label: "Perjalanan" },
-  { href: "#services", label: "Menu" },
-  { href: "#gallery", label: "Ruang" },
+const LINKS = [
+  { href: "#jalan", label: "Jalan" },
+  { href: "#menu", label: "Menu" },
+  { href: "#tempat", label: "Tempat" },
   { href: "#booking", label: "Reservasi" },
-  { href: "#visit", label: "Lokasi" },
 ];
 
-export function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
+export default function Navbar() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open ]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 px-4 pt-4 md:px-8">
+    <header className="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur">
       <nav
+        className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6"
         aria-label="Navigasi utama"
-        className="mx-auto flex max-w-6xl items-center justify-between border border-line bg-bg/90 px-5 py-3 backdrop-blur-md"
       >
-        <a
-          href="/"
-          className="font-display text-xl font-bold tracking-tight text-ink"
-        >
-          {SITE_DATA.brandName}
+        <a href="/" className="flex flex-col leading-none" aria-label="Ruangnamu Coffee & Space — beranda">
+          <span className="font-display text-xl font-bold tracking-tight">Ruangnamu</span>
+          <span className="font-sans text-xs font-semibold tracking-wide text-muted">
+            Coffee <span className="font-sans">&amp;</span> Space
+          </span>
         </a>
 
-        <div className="hidden items-center gap-7 md:flex">
-          {NAV_LINKS.map((item) => (
+        <div className="hidden items-center gap-1 md:flex">
+          {LINKS.map((link) => (
             <a
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-muted transition-colors hover:text-ink"
+              key={link.href}
+              href={link.href}
+              className="rounded-full px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-joglo hover:text-paper"
             >
-              {item.label}
+              {link.label}
             </a>
           ))}
-        </div>
-
-        <div className="hidden md:block">
           <a
-            href="#booking"
-            className="inline-flex min-h-[44px] items-center bg-accent px-6 py-3 text-sm font-semibold text-accent-ink transition-opacity hover:opacity-90"
+            href={SITE_DATA.instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-2 rounded-full border border-ink px-4 py-2 text-sm font-semibold transition-colors hover:bg-ink hover:text-paper"
           >
-            {SITE_DATA.primaryCtaLabel}
+            Instagram
           </a>
         </div>
 
         <button
           type="button"
-          onClick={() => setMenuOpen((prev) => !prev)}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-nav-drawer"
-          aria-label={menuOpen ? "Tutup menu" : "Buka menu"}
-          className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center border border-line px-3 text-sm font-medium text-ink md:hidden"
+          className="rounded-full border border-ink px-4 py-2 text-sm font-semibold md:hidden"
+          aria-expanded={open}
+          aria-controls="nav-drawer"
+          onClick={() => setOpen((v) => !v)}
         >
-          {menuOpen ? "Tutup" : "Menu"}
+          {open ? "Tutup" : "Menu"}
         </button>
       </nav>
 
-      {menuOpen && (
-        <div
-          id="mobile-nav-drawer"
-          className="mx-auto mt-2 flex max-w-6xl flex-col border border-line bg-bg p-4 md:hidden"
-        >
-          {NAV_LINKS.map((item) => (
+      {open && (
+        <div id="nav-drawer" className="border-t border-line bg-paper px-4 pb-4 pt-2 md:hidden">
+          {LINKS.map((link) => (
             <a
-              key={item.href}
-              href={item.href}
-              onClick={() => setMenuOpen(false)}
-              className="flex min-h-[44px] items-center border-b border-line/60 py-2 text-base font-medium text-ink"
+              key={link.href}
+              href={link.href}
+              onClick={() => setOpen(false)}
+              className="block rounded-lg px-3 py-3 text-base font-medium hover:bg-joglo hover:text-paper"
             >
-              {item.label}
+              {link.label}
             </a>
           ))}
           <a
-            href="#booking"
-            onClick={() => setMenuOpen(false)}
-            className="mt-4 inline-flex min-h-[44px] items-center justify-center bg-accent px-6 py-3 text-sm font-semibold text-accent-ink"
+            href={SITE_DATA.instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 block rounded-lg border border-ink px-3 py-3 text-base font-semibold"
           >
-            {SITE_DATA.primaryCtaLabel}
+            Instagram {SITE_DATA.instagramHandle}
           </a>
         </div>
       )}

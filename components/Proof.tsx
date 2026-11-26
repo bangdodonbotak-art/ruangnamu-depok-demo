@@ -1,30 +1,24 @@
 import { SITE_DATA } from "@/lib/site-data";
 
-export function Proof() {
-  if (SITE_DATA.verifiedReviews.length === 0) {
-    return null;
-  }
-
+/**
+ * Proof — the one verified voice. Full-width editorial quote, no grid,
+ * no carousel, no motion. Rating line above; never a review count.
+ */
+export default function Proof() {
   const review = SITE_DATA.verifiedReviews[0];
 
   return (
-    <section className="border-b border-line bg-bg px-6 py-16 md:px-16 lg:py-24">
-      <div className="mx-auto max-w-6xl">
-        <h2 className="text-4xl font-semibold text-ink md:text-[3.5rem]">
-          Catatan pengunjung
-        </h2>
-
-        <blockquote className="mt-10 max-w-4xl">
-          <p className="text-xs font-semibold text-accent">
-            Rating {SITE_DATA.googleRating}/5 di Google Maps
-          </p>
-          <p className="mt-4 font-display text-3xl leading-snug font-semibold text-ink md:text-4xl">
+    <section aria-label="Ulasan pengunjung" className="section-pad-tight">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6">
+        <p className="text-base font-semibold text-joglo">
+          Rating {SITE_DATA.googleRating}/5 di Google Maps
+        </p>
+        <blockquote className="mt-6">
+          <p className="font-display text-3xl font-semibold leading-snug sm:text-4xl">
             &ldquo;{review.quote}&rdquo;
           </p>
-          <footer className="mt-6 text-sm text-muted">
-            <span className="font-semibold text-ink">{review.author}</span>
-            {" · "}
-            {review.source} · {review.date}
+          <footer className="mt-6 text-base text-muted">
+            {review.author} · {review.source} · {review.date}
           </footer>
         </blockquote>
       </div>

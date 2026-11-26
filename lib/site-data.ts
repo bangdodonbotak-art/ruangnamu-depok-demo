@@ -3,7 +3,6 @@ export interface StoryBeat {
   step: string;
   title: string;
   summary: string;
-  highlightItem: string;
   priceText: string | null;
   basisText: string | null;
   mediaPath: string | null;
@@ -44,8 +43,9 @@ export const SITE_DATA = {
   siteUrl: "https://ruangnamu-depok-demo.vercel.app",
   locale: "id_ID",
   heroHeadlineLines: [
-    "Rumah Joglo di balik",
-    "ramai Margonda, untuk",
+    "Rumah Joglo di",
+    "balik ramai",
+    "Margonda, untuk",
     "ngopi pelan.",
   ],
   heroSubtext:
@@ -67,51 +67,37 @@ export const SITE_DATA = {
     updatedLabel: "Hari ini — cek konfirmasi admin sebelum datang rombongan",
     note: "Tersedia area indoor, pendopo Joglo, dan semi-outdoor taman.",
   },
-  storyUnitLabel: "Langkah kaki dari gerbang Jl. Ciliwung menuju taman belakang",
+  storyUnitLabel: "Tiga pemberhentian, dari pendopo Joglo sampai photobox",
   storyBeats: [
     {
-      id: "beat-gerbang",
-      step: "01",
-      title: "Berbelok dari hiruk Margonda",
-      summary:
-        "Lima puluh meter masuk ke Jl. Ciliwung, bising jalan utama berganti halaman parkir luas dan rimbun pepohonan.",
-      highlightItem: "Ice Lemon Grass Tea",
-      priceText: null,
-      basisText: null,
-      mediaPath: null,
-    },
-    {
       id: "beat-joglo",
-      step: "02",
+      step: "01",
       title: "Masuk ke pendopo Joglo",
       summary:
-        "Struktur kayu tradisional Jawa menyambut dengan meja kerja bercolokan, Wi-Fi, dan ruang indoor.",
-      highlightItem: "Ice Cafe Latte",
+        "Struktur kayu tradisional Jawa menyambut dengan meja kerja bercolokan, Wi-Fi (can be slow when full), dan ruang indoor.",
       priceText: null,
       basisText: null,
-      mediaPath: null,
+      mediaPath: "/media/journey-01-joglo.webp",
     },
     {
       id: "beat-kolam",
-      step: "03",
+      step: "02",
       title: "Teras taman & kolam ikan",
       summary:
         "Area semi-outdoor terbuka menghadap kolam ikan dan tanaman hijau, lengkap dengan mushola di area belakang.",
-      highlightItem: "Nasi Jeruk With Paru Pedas",
       priceText: null,
       basisText: null,
-      mediaPath: null,
+      mediaPath: "/media/journey-02-garden.webp",
     },
     {
       id: "beat-photobox",
-      step: "04",
+      step: "03",
       title: "Sudut cetak kenangan",
       summary:
         "Tersedia photobox digital interaktif untuk mengabadikan momen berkumpul sebelum pulang.",
-      highlightItem: "Tempe Mendoan",
       priceText: null,
       basisText: null,
-      mediaPath: null,
+      mediaPath: "/media/journey-03-photobox.webp",
     },
   ] satisfies StoryBeat[],
   menuItems: [
@@ -123,16 +109,15 @@ export const SITE_DATA = {
       priceText: null,
       basisText: "per porsi",
       featured: true,
-      mediaPath: null,
+      mediaPath: "/media/menu-nasi-jeruk.webp",
     },
     {
       id: "nasi-kulit",
-      name: "Nasi Kulit TuanRuma",
+      name: "Nasi Kulit Tuanruma",
       category: "Makanan Utama",
       description: "Nasi hangat dengan kulit ayam renyah, serundeng, dan bumbu hitam.",
       priceText: null,
       basisText: "per porsi",
-      featured: true,
       mediaPath: null,
     },
     {
@@ -151,7 +136,8 @@ export const SITE_DATA = {
       description: "Spageti saus creamy dengan smoked beef, jamur, mozzarella, dan garlic bread.",
       priceText: null,
       basisText: "per porsi",
-      mediaPath: null,
+      featured: true,
+      mediaPath: "/media/menu-carbonara.webp",
     },
     {
       id: "ice-cafe-latte",
@@ -160,7 +146,6 @@ export const SITE_DATA = {
       description: "Perpaduan espresso dan susu segar dingin.",
       priceText: null,
       basisText: "per gelas",
-      featured: true,
       mediaPath: null,
     },
     {
@@ -196,52 +181,50 @@ export const SITE_DATA = {
       category: "Kopi & Minuman",
       description: "Kopi susu gula aren signature Ruangnamu.",
       priceText: null,
-      basisText: "per botol / gelas",
+      basisText: "per botol",
       mediaPath: null,
     },
   ] satisfies MenuItem[],
-  gallerySpaces: [
+  spaces: [
     {
       id: "space-joglo",
       title: "Pendopo Kayu Joglo",
       zone: "Joglo",
-      detail: "Atap tinggi bergaya rumah tradisional Jogja dengan pencahayaan hangat dan sirkulasi udara alami.",
-      aspect: "landscape",
-      mediaPath: null,
+      detail: "Struktur kayu tradisional Jawa — limasan, atap tinggi, meja kayu panjang.",
+      aspect: "portrait",
+      mediaPath: "/media/spaces-joglo.webp",
     },
     {
       id: "space-kolam",
-      title: "Teras Kolam Ikan",
+      title: "Teras Taman & Kolam",
       zone: "Taman",
-      detail: "Bangku semi-outdoor di tepi kolam ikan yang dikelilingi tanaman rindang.",
+      detail: "Kolam ikan dan taman rindang di area semi-outdoor.",
       aspect: "portrait",
-      mediaPath: null,
+      mediaPath: "/media/spaces-taman.webp",
     },
     {
       id: "space-wfc",
       title: "Meja Kerja & Colokan",
       zone: "Joglo",
-      detail: "Area duduk tenang dengan akses Wi-Fi dan stop kontak untuk kerja atau diskusi kecil.",
-      aspect: "landscape",
-      mediaPath: null,
+      detail: "Meja kerja bercolokan, Wi-Fi (can be slow when full).",
+      aspect: "portrait",
+      mediaPath: "/media/spaces-wfc.webp",
     },
     {
       id: "space-parkir",
-      title: "Halaman Parkir & Mushola",
+      title: "Parkir & Mushola",
       zone: "Fasilitas",
-      detail: "Halaman depan yang lega untuk kendaraan serta mushola dan toilet yang terawat.",
+      detail: "Parkir luas untuk sekitar 10 mobil, gang muat 1 mobil; mushola di area belakang.",
       aspect: "portrait",
-      mediaPath: null,
-    },
-    {
-      id: "space-photobox",
-      title: "Photobox Digital",
-      zone: "Fasilitas",
-      detail: "Sudut foto interaktif dengan hasil cetak langsung untuk pengunjung.",
-      aspect: "landscape",
-      mediaPath: null,
+      mediaPath: "/media/spaces-parkir.webp",
     },
   ] satisfies GallerySpace[],
+  photobox: {
+    priceText: "Rp30.000",
+    includes: "2 strip cetak + softfile + GIF",
+    source: "Photoplace.id, 6 Feb 2025",
+    note: "Konfirmasi harga saat reservasi.",
+  },
   verifiedReviews: [
     {
       id: "rev-3",

@@ -1,91 +1,141 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { SITE_DATA } from "@/lib/site-data";
-import { useReducedMotion } from "@/lib/motion";
+import { shouldPlayFilm } from "@/lib/motion";
 
-export function Hero() {
-  const reduceMotion = useReducedMotion();
+const FILM_SRC = "/media/hero/hero-film-9x16.mp4";
+const POSTER_SRC = "/media/hero/hero-poster.webp";
+
+/**
+ * Hero — asymmetric split. Desktop: ~55% ground / ~45% full-height native
+ * 9:16 film panel. Mobile: film first, sized BY HEIGHT (h-[24svh], full
+ * width — never aspect-ratio + max-h: that geometry shrank the panel to
+ * 293px with an 82px cream strip, Audit-V2 F3), ground below with tight
+ * mobile spacing so H1 + subtext + CTA all sit in the first 667px viewport
+ * (Audit-V2 F4). Text is static at first paint — no entrance animation, no
+ * hidden start state. The film only mounts after a client-side check
+ * (reduced-motion or Save-Data → poster still fills the panel, never a video).
+ */
+export default function Hero() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const [canPlay, setCanPlay] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const [manuallyPaused, setManuallyPaused] = useState(false);
+
+  useEffect(() => {
+    setCanPlay(shouldPlayFilm());
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    const panel = panelRef.current;
+    if (!video || !panel || !canPlay) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!manuallyPaused) {
+            void video.play().catch(() => undefined);
+            setPaused(false);
+          }
+        } else {
+          video.pause();
+          setPaused(true);
+        }
+      },
+      { threshold: 0.15 },
+    );
+    io.observe(panel);
+    return () => io.disconnect();
+  }, [canPlay, manuallyPaused]);
+
+  const togglePlay = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      void video.play().catch(() => undefined);
+      setPaused(false);
+      setManuallyPaused(false);
+    } else {
+      video.pause();
+      setPaused(true);
+      setManuallyPaused(true);
+    }
+  };
 
   return (
-    <section className="relative flex min-h-[92vh] items-end border-b border-line bg-surface px-6 pt-32 pb-16 md:px-16 md:pb-24">
-      <div className="relative z-10 mx-auto grid w-full max-w-6xl gap-10 lg:grid-cols-12 lg:items-end">
-        <div className="lg:col-span-8">
-          <h1 className="text-[clamp(2.75rem,6vw,5.125rem)] font-bold text-ink">
-            {SITE_DATA.heroHeadlineLines.map((line, idx) => (
-              <motion.span
-                key={idx}
-                className="block"
-                initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={
-                  reduceMotion
-                    ? { duration: 0 }
-                    : { duration: 0.75, ease: "easeOut", delay: idx * 0.09 }
-                }
-              >
+    <section aria-label="Ruangnamu Coffee & Space" className="relative">
+      <div className="grid lg:min-h-svh lg:grid-cols-[55%_45%]">
+        {/* Ground — left on desktop, below the film on mobile */}
+        <div className="order-2 flex flex-col justify-center px-4 pb-12 pt-4 sm:px-6 lg:order-1 lg:px-12 lg:pb-20 lg:pt-16 xl:px-16">
+          <p className="font-display text-lg font-semibold text-joglo">
+            ±50 m dari Jl. Margonda Raya
+          </p>
+          <h1 className="display-xl mt-3 lg:mt-4">
+            {SITE_DATA.heroHeadlineLines.map((line) => (
+              <span key={line} className="block">
                 {line}
-              </motion.span>
+              </span>
             ))}
           </h1>
-          <motion.p
-            className="mt-6 max-w-xl text-base text-muted md:text-lg"
-            initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={
-              reduceMotion
-                ? { duration: 0 }
-                : { duration: 0.75, ease: "easeOut", delay: 0.27 }
-            }
-          >
-            {SITE_DATA.heroSubtext}
-          </motion.p>
-          <motion.div
-            className="mt-8 flex flex-wrap items-center gap-4"
-            initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={
-              reduceMotion
-                ? { duration: 0 }
-                : { duration: 0.75, ease: "easeOut", delay: 0.36 }
-            }
-          >
+          <p className="body-lg mt-4 max-w-[55ch] text-muted lg:mt-6">{SITE_DATA.heroSubtext}</p>
+          <div className="mt-6 lg:mt-8">
             <a
               href="#booking"
-              className="inline-flex min-h-[44px] items-center bg-accent px-8 py-4 text-sm font-semibold text-accent-ink transition-opacity hover:opacity-90"
+              className="inline-block rounded-sm bg-joglo px-7 py-3.5 text-base font-semibold text-paper transition-opacity hover:opacity-90"
             >
               {SITE_DATA.primaryCtaLabel}
             </a>
-            <a
-              href="#story"
-              className="inline-flex min-h-[44px] items-center border border-line bg-bg px-7 py-4 text-sm font-medium text-ink transition-colors hover:bg-surface"
-            >
-              Lihat Perjalanan Ruang
-            </a>
-          </motion.div>
-          <div className="mt-12">
+          </div>
+          <div className="mt-8 flex items-start gap-4 lg:mt-12">
+            <div className="h-12 w-px shrink-0 bg-joglo" aria-hidden="true" />
             <p className="text-sm font-medium text-muted">
-              Gulir — 4 pemberhentian menuju Joglo
+              Gulir — 3 pemberhentian menuju Joglo
             </p>
-            <span
-              aria-hidden="true"
-              className="mt-3 block h-12 w-px bg-accent"
-            />
           </div>
         </div>
 
-        <div className="border-t border-line pt-5 text-sm text-muted lg:col-span-4 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
-          <p className="font-display text-5xl font-semibold text-ink">
-            ±50 m
-          </p>
-          <p className="mt-2 text-xs font-medium text-accent">
-            dari Jl. Margonda Raya
-          </p>
-          <p className="mt-4 font-semibold text-ink">{SITE_DATA.fullBrandName}</p>
-          <p className="mt-2">{SITE_DATA.landmarkNote}</p>
-          <p className="mt-3 font-medium text-ink">
-            {SITE_DATA.hours[0].days}: {SITE_DATA.hours[0].time}
-          </p>
+        {/* Film — right on desktop, first on mobile. Sized BY HEIGHT on
+            mobile (F3): aspect-ratio + max-h capped the width at 293px and
+            left an 82px cream strip plus a 147px phantom grid gap. */}
+        <div
+          ref={panelRef}
+          className="photo-frame relative order-1 h-[24svh] w-full lg:order-2 lg:h-auto lg:min-h-svh"
+        >
+          {canPlay ? (
+            <video
+              ref={videoRef}
+              className="block h-full w-full object-cover"
+              src={FILM_SRC}
+              poster={POSTER_SRC}
+              muted
+              loop
+              playsInline
+              autoPlay
+              aria-label="Film suasana pagi di Ruangnamu Coffee & Space"
+            />
+          ) : (
+            <Image
+              src={POSTER_SRC}
+              alt="Espresso dituang ke cangkir di Ruangnamu Coffee & Space"
+              width={720}
+              height={1280}
+              priority
+              className="block h-full w-full object-cover"
+            />
+          )}
+          {canPlay && (
+            <button
+              type="button"
+              onClick={togglePlay}
+              aria-label={paused ? "Putar film" : "Jeda film"}
+              className="absolute bottom-4 right-4 rounded-full border border-paper/60 bg-ink/70 px-4 py-2 text-sm font-semibold text-paper backdrop-blur-sm transition-opacity hover:opacity-90"
+            >
+              {paused ? "Putar" : "Jeda"}
+            </button>
+          )}
         </div>
       </div>
     </section>
