@@ -41,7 +41,7 @@ export const SITE_DATA = {
   brandName: "Ruangnamu",
   fullBrandName: "Ruangnamu Coffee & Space",
   alsoKnownAs: "Ruangnamu Coffee & Eatery",
-  siteUrl: "https://ruangnamu.example.com",
+  siteUrl: "https://ruangnamu-depok-demo.vercel.app",
   locale: "id_ID",
   heroHeadlineLines: [
     "Rumah Joglo di balik",
