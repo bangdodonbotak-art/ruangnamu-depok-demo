@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { SITE_DATA } from "@/lib/site-data";
+import { BlurText } from "@/components/blur-text";
 
 interface PhotoboxProps {
   onAddToBooking: () => void;
@@ -14,11 +15,19 @@ export default function Photobox({ onAddToBooking }: PhotoboxProps) {
   const box = SITE_DATA.photobox;
 
   return (
-    <section id="photobox" aria-label="Photobox" className="section-pad">
+    <section id="photobox" aria-label="Photobox" className="section-pad-tight-bottom">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
           <div>
-            <h2 className="display-lg">RedRoom Photobox</h2>
+            <BlurText
+              as="h2"
+              by="word"
+              stagger={0.06}
+              duration={0.7}
+              trigger="inView"
+              className="display-lg"
+              text="RedRoom Photobox"
+            />
             <p className="body-lg mt-4 max-w-[55ch] text-muted">
               Bilik foto digital di sudut kafe — cetak kenangan sebelum pulang,
               bareng siapa pun yang ikut duduk di meja.
@@ -28,7 +37,7 @@ export default function Photobox({ onAddToBooking }: PhotoboxProps) {
             </p>
             <p className="mt-3 text-lg font-medium">{box.includes}</p>
             <p className="mt-4 max-w-[55ch] text-base leading-relaxed text-muted">
-              Harga peluncuran {box.source} (juga 30K, Jul 2025). {box.note}
+              {box.sourceLine}
             </p>
             <a
               href="#booking"

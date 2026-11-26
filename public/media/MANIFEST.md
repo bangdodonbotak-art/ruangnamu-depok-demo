@@ -1,4 +1,4 @@
-# Media Manifest — Ruangnamu v2
+# Media Manifest — Ruangnamu v3
 
 Every file in `public/media/` is a processed derivative of a reel or still in
 `assets-raw/`. No raw reel is ever shipped. Permission for **every** file:
@@ -10,7 +10,7 @@ as a final offer.
 | # | Output file | Source reel | Timestamp | Slot | Tier |
 |---|---|---|---|---|---|
 | 1 | `hero/hero-film-9x16.mp4` | `01-ig-official-hero.mp4` | 10.0–20.0s (10s) | Hero film, all breakpoints | A |
-| 2 | `hero/hero-poster.webp` | `01-ig-official-hero.mp4` | 18.5s | Hero poster — carries LCP | A |
+| 2 | `hero/hero-poster.webp` | `01-ig-official-hero.mp4` | 14.5s | Hero poster — carries LCP; re-picked in v3 (staff sweeping the garden path) | A |
 | 3 | `journey-01-joglo.webp` | `02-ig-official-wfc.mp4` | 10.0s | Journey stop 01 — pendopo Joglo | A |
 | 4 | `journey-02-garden.webp` | `12-diantin04-review.mp4` | 49.0s | Journey stop 02 — teras taman & kolam (garden-wide, NOT a pond close-up); top-cropped to remove burned-in OPEN/hours caption | B |
 | 5 | `journey-03-photobox.webp` | `06-ig-official-photobox.mp4` | 12.0s | Journey stop 03 — photobox | A |

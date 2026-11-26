@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { SITE_DATA } from "@/lib/site-data";
+import { BlurText } from "@/components/blur-text";
 
 /**
  * Journey — the walk in 3 stops. The pinned GSAP scroll-film from the
@@ -28,12 +29,23 @@ export default function JourneyWalk() {
     <section id="jalan" aria-label="Jalan menuju Joglo" className="section-pad">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="max-w-2xl">
-          <h2 className="display-lg">Jalan pelan, tiga pemberhentian</h2>
+          <BlurText
+            as="h2"
+            by="word"
+            stagger={0.06}
+            duration={0.7}
+            trigger="inView"
+            className="display-lg"
+            text="Jalan pelan, tiga pemberhentian"
+          />
           <p className="body-lg mt-4 text-muted">{SITE_DATA.storyUnitLabel}.</p>
         </div>
 
-        {/* Stepper — numbered buttons + progress dots, touch targets ≥44px */}
-        <div className="mt-10 flex flex-wrap items-center gap-3" aria-label="Pemberhentian">
+        {/* Stepper — numeral-only pills + a dedicated active-title line.
+            The stop title used to live INSIDE the pill and clipped at the
+            pill edge ("udut cetak kenangan"); removing the title from the
+            pill removes the failure class entirely. Touch targets ≥44px. */}
+        <div className="mt-10 flex flex-wrap items-center gap-4" aria-label="Pemberhentian">
           {beats.map((beat, i) => (
             <button
               key={beat.id}
@@ -41,14 +53,13 @@ export default function JourneyWalk() {
               aria-current={active === i ? "true" : undefined}
               aria-label={`Pemberhentian ${beat.step}: ${beat.title}`}
               onClick={() => goTo(i)}
-              className={`flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 rounded-full border px-4 py-2 font-display text-lg font-semibold transition-colors ${
+              className={`flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center whitespace-nowrap overflow-visible rounded-full border px-4 py-2 font-display text-lg font-semibold transition-colors ${
                 active === i
                   ? "border-joglo bg-joglo text-paper"
                   : "border-line bg-paper text-ink hover:border-joglo"
               }`}
             >
               {beat.step}
-              <span className="hidden font-sans text-sm font-medium sm:inline">{beat.title}</span>
             </button>
           ))}
           <div className="ml-1 flex items-center gap-2" aria-hidden="true">
@@ -60,6 +71,9 @@ export default function JourneyWalk() {
             ))}
           </div>
         </div>
+        <p className="mt-4 font-display text-2xl font-semibold" aria-live="polite">
+          Pemberhentian {beats[active].step} — {beats[active].title}
+        </p>
 
         <div className="mt-12 space-y-16 lg:space-y-24">
           {beats.map((beat, i) => (

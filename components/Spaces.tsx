@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { SITE_DATA } from "@/lib/site-data";
+import { BlurText } from "@/components/blur-text";
 
 const ALTS: Record<string, string> = {
   "space-joglo":
@@ -20,7 +21,15 @@ export default function Spaces() {
     <section id="tempat" aria-label="Tempat" className="section-pad">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="max-w-2xl">
-          <h2 className="display-lg">Empat sudut yang bikin betah</h2>
+          <BlurText
+            as="h2"
+            by="word"
+            stagger={0.06}
+            duration={0.7}
+            trigger="inView"
+            className="display-lg"
+            text="Empat sudut yang bikin betah"
+          />
           <p className="body-lg mt-4 text-muted">
             Pendopo kayu, taman dan kolam, meja kerja, sampai halaman parkir —
             semuanya dalam satu halaman yang sama.

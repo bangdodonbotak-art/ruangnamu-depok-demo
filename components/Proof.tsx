@@ -8,7 +8,7 @@ export default function Proof() {
   const review = SITE_DATA.verifiedReviews[0];
 
   return (
-    <section aria-label="Ulasan pengunjung" className="section-pad-tight">
+    <section aria-label="Ulasan pengunjung" className="proof-pad">
       <div className="mx-auto max-w-4xl px-4 sm:px-6">
         <p className="text-base font-semibold text-joglo">
           Rating {SITE_DATA.googleRating}/5 di Google Maps

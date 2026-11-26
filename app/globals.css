@@ -11,7 +11,7 @@
   --color-ink: #1a1e1b;
   --color-joglo: #2f5d50;
   --color-awning: #a63a2b;
-  --color-wood: #8c6a48;
+  --color-wood: #7d5e3f;
   --color-muted: #58605a;
 
   --font-display: "Fraunces", "Georgia", serif;
@@ -79,6 +79,36 @@ h3 {
   padding-bottom: clamp(3.5rem, 6vw, 5rem);
 }
 
+/* Tight bottom only (Photobox, Booking — fix (b)): keeps the section-pad
+   top, caps the bottom at the tight scale so the gap to the next section
+   totals ~120px / ≤110px instead of ~216–240px. Plain CSS classes here
+   are unlayered, so a Tailwind pb-* utility would lose to them — hence
+   these dedicated classes instead of a utility override. */
+.section-pad-tight-bottom {
+  padding-top: clamp(3.5rem, 8vw, 10rem);
+  padding-bottom: clamp(3.5rem, 6vw, 5rem);
+}
+
+/* Booking only (F-01 fix round 1, 27 Nov 2026): bottom cut to 2.5rem (40px)
+   so the Booking→footer content-to-content gap is 40 + 64 (footer py-16)
+   = 104px at 1440px, target ≤110px. A dedicated class — NOT an edit of
+   .section-pad-tight-bottom — because that class is shared with Photobox
+   and editing it would move the Photobox→Proof gap (120px, already passing)
+   too. Footer py-16 is untouched: its top padding is half the gap, but
+   cutting it would shrink the footer's own breathing room, and the
+   pt-16 pb-6 variant would not fix the gap at all (it only trims the
+   footer's bottom, below the measured junction). */
+.booking-pad {
+  padding-top: clamp(3.5rem, 8vw, 10rem);
+  padding-bottom: 2.5rem;
+}
+
+/* Proof (fix (b)): top cut to 40px, bottom stays the tight scale. */
+.proof-pad {
+  padding-top: 2.5rem;
+  padding-bottom: clamp(3.5rem, 6vw, 5rem);
+}
+
 /* Focus visibility on every interactive element. */
 :focus-visible {
   outline: 3px solid var(--color-joglo);
@@ -114,6 +144,45 @@ footer :focus-visible,
   .photo-frame:hover img {
     transform: scale(1.02);
   }
+}
+
+/* Hero viewport — 100svh with a 100vh fallback for older browsers. */
+.hero-viewport {
+  height: 100vh;
+  height: 100svh;
+}
+
+/* Hero desktop drift — pans the visible 9:16 band through the frame
+   (garden → people → pour). Desktop only (≥1025px), transform-only,
+   killed on mobile and by the reduced-motion block below. */
+@media (min-width: 1025px) {
+  @keyframes hero-drift {
+    from {
+      transform: translateY(-6%);
+    }
+    to {
+      transform: translateY(6%);
+    }
+  }
+
+  .hero-media-drift {
+    animation: hero-drift 24s ease-in-out infinite alternate;
+  }
+}
+
+/* OPEN NOW live dot — gentle opacity pulse, 2s. The reduced-motion
+   block below zeroes it to a static dot. */
+@keyframes open-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.35;
+  }
+}
+
+.open-dot-pulse {
+  animation: open-pulse 2s ease-in-out infinite alternate;
 }
 
 /* Reduced motion: everything static. No animation, no smooth scroll,

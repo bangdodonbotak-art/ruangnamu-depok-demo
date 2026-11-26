@@ -44,11 +44,11 @@ export const MEDIA_MANIFEST: MediaManifestRow[] = [
   {
     output: "hero/hero-poster.webp",
     sourceReel: "01-ig-official-hero.mp4",
-    sourceTimestampSec: 18.5,
-    slot: "Hero poster — carries LCP; same window as the film",
+    sourceTimestampSec: 14.5,
+    slot: "Hero poster — carries LCP; same window as the film; re-picked in v3 — shows the place, not the cup (staff sweeping the garden path)",
     tier: "A",
     permission: "NOT ASKED",
-    alt: "Espresso dituang ke cangkir di atas nampan hitam",
+    alt: "Taman rindang Ruangnamu di pagi hari, staf menyapu jalan batu di antara tanaman hijau",
     budgetKb: 350,
   },
   {

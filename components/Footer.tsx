@@ -32,6 +32,9 @@ export default function Footer() {
                 </p>
               ))}
             </div>
+            <p className="mt-4 max-w-[55ch] text-base leading-relaxed text-paper/80">
+              Buka sampai malam — mushola di area belakang.
+            </p>
             <p className="mt-6 text-base font-semibold">
               Rating {SITE_DATA.googleRating}/5 di Google Maps
             </p>
@@ -59,9 +62,6 @@ export default function Footer() {
                 loading="lazy"
               />
             </div>
-            <p className="mt-3 max-w-[280px] text-sm leading-relaxed text-paper/70">
-              Buka sampai malam — mushola di area belakang.
-            </p>
           </div>
         </div>
 

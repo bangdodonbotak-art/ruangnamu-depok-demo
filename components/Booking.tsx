@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { SITE_DATA } from "@/lib/site-data";
+import OpenNowChip from "@/components/OpenNowChip";
 
 const AREAS = [
   "Pendopo Joglo",
@@ -127,9 +128,9 @@ export default function Booking({ photoboxSelected, onPhotoboxChange }: BookingP
   const labelCls = "block text-sm font-semibold";
 
   return (
-    <section id="booking" aria-label="Reservasi" className="section-pad">
-      <div className="mx-auto max-w-2xl px-4 sm:px-6">
-        <h2 className="display-lg text-center">Reservasi meja</h2>
+    <section id="booking" aria-label="Reservasi" className="booking-pad">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6">
+        <h2 className="display-lg">Reservasi meja</h2>
         <ol className="mt-6 space-y-2 text-base leading-relaxed text-muted">
           <li>
             <span className="font-semibold text-ink">1.</span> Isi formulir
@@ -145,7 +146,7 @@ export default function Booking({ photoboxSelected, onPhotoboxChange }: BookingP
         </ol>
 
         <form
-          className="mt-10 space-y-5 rounded-sm border border-line bg-paper p-5 sm:p-7"
+          className="mt-10 space-y-5 rounded-sm border border-line bg-paper p-6 sm:p-10"
           onSubmit={(e) => e.preventDefault()}
         >
           <div>
@@ -299,13 +300,16 @@ export default function Booking({ photoboxSelected, onPhotoboxChange }: BookingP
           )}
         </form>
 
-        <p className="mt-6 text-center text-base text-muted">
+        <p className="mt-6 text-base text-muted">
           Harga makanan &amp; minuman dikonfirmasi admin saat reservasi.
         </p>
 
         <div className="mt-10 grid gap-4 border-t border-line pt-8 text-base sm:grid-cols-3">
           <div>
             <p className="text-sm font-semibold">Jam buka</p>
+            <div className="mt-2">
+              <OpenNowChip variant="onPaper" />
+            </div>
             {SITE_DATA.hours.map((h) => (
               <p key={h.days} className="mt-1 text-muted">
                 {h.days}

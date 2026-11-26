@@ -59,6 +59,13 @@ export const SITE_DATA = {
     { days: "Senin – Kamis & Minggu", time: "10.00 – 22.00 WIB" },
     { days: "Jumat – Sabtu", time: "10.00 – 23.00 WIB" },
   ],
+  // Structured hours (single source of truth for the live OPEN NOW chip
+  // and the JSON-LD openingHoursSpecification). Mirrors `hours` above:
+  // 0 = Sunday. Source: RESEARCH.md row 5 (VERIFIED, 5 sources).
+  hoursStructured: [
+    { days: [0, 1, 2, 3, 4], opens: "10:00", closes: "22:00" }, // Sun–Thu
+    { days: [5, 6], opens: "10:00", closes: "23:00" }, // Fri–Sat
+  ],
   instagramHandle: "@ruangnamucoffee",
   instagramUrl: "https://www.instagram.com/ruangnamucoffee/",
   whatsappNumber: "",
@@ -74,7 +81,7 @@ export const SITE_DATA = {
       step: "01",
       title: "Masuk ke pendopo Joglo",
       summary:
-        "Struktur kayu tradisional Jawa menyambut dengan meja kerja bercolokan, Wi-Fi (can be slow when full), dan ruang indoor.",
+        "Struktur kayu tradisional Jawa menyambut dengan meja kerja bercolokan, Wi-Fi, dan ruang indoor.",
       priceText: null,
       basisText: null,
       mediaPath: "/media/journey-01-joglo.webp",
@@ -206,7 +213,7 @@ export const SITE_DATA = {
       id: "space-wfc",
       title: "Meja Kerja & Colokan",
       zone: "Joglo",
-      detail: "Meja kerja bercolokan, Wi-Fi (can be slow when full).",
+      detail: "Meja kerja bercolokan. Wi-Fi tersedia, bisa melambat saat ramai.",
       aspect: "portrait",
       mediaPath: "/media/spaces-wfc.webp",
     },
@@ -222,8 +229,7 @@ export const SITE_DATA = {
   photobox: {
     priceText: "Rp30.000",
     includes: "2 strip cetak + softfile + GIF",
-    source: "Photoplace.id, 6 Feb 2025",
-    note: "Konfirmasi harga saat reservasi.",
+    sourceLine: "Harga peluncuran Photoplace.id, 6 Feb 2025. Konfirmasi harga saat reservasi.",
   },
   verifiedReviews: [
     {

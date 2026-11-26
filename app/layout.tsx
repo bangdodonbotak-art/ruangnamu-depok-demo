@@ -24,7 +24,7 @@ export const metadata: Metadata = {
         url: "/media/hero/hero-poster.webp",
         width: 720,
         height: 1280,
-        alt: "Espresso dituang ke cangkir di Ruangnamu Coffee & Space",
+        alt: "Taman rindang Ruangnamu di pagi hari, staf menyapu jalan batu di antara tanaman hijau",
       },
     ],
   },
@@ -45,6 +45,8 @@ export const metadata: Metadata = {
  * anyway. The 4.7 rating stays as plain copy on the page (§6.7/§6.9).
  * No Review markup either — the one verified quote carries no star value.
  */
+const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] as const;
+
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "CafeOrCoffeeShop",
@@ -60,20 +62,14 @@ const JSON_LD = {
     postalCode: "16423",
     addressCountry: "ID",
   },
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Sunday"],
-      opens: "10:00",
-      closes: "22:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Friday", "Saturday"],
-      opens: "10:00",
-      closes: "23:00",
-    },
-  ],
+  // Derived from SITE_DATA.hoursStructured — single source of truth,
+  // never a duplicated copy of the hours.
+  openingHoursSpecification: SITE_DATA.hoursStructured.map((row) => ({
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: (row.days as readonly number[]).map((d) => DAY_NAMES[d]),
+    opens: row.opens,
+    closes: row.closes,
+  })),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

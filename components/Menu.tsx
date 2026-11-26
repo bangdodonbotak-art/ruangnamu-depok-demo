@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { SITE_DATA } from "@/lib/site-data";
+import { BlurText } from "@/components/blur-text";
 
 /**
  * Menu — 9 items in site-data order, one honest list. No category
@@ -20,7 +21,15 @@ export default function Menu() {
     <section id="menu" aria-label="Menu" className="section-pad bg-paper">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="max-w-2xl">
-          <h2 className="display-lg">Yang bisa dipesan di meja</h2>
+          <BlurText
+            as="h2"
+            by="word"
+            stagger={0.06}
+            duration={0.7}
+            trigger="inView"
+            className="display-lg"
+            text="Yang bisa dipesan di meja"
+          />
           <p className="body-lg mt-4 text-muted">
             Sembilan sajian rumahan — dari nasi daun jeruk sampai kopi susu
             gula aren. Foto dua hidangan di bawah ini asli dari meja
