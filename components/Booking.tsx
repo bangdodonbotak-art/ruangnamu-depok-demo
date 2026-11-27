@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SITE_DATA } from "@/lib/site-data";
+import { MagneticButton } from "@/components/magnetic-button";
 import OpenNowChip from "@/components/OpenNowChip";
 
 const AREAS = [
@@ -14,6 +15,9 @@ const AREAS = [
 interface BookingProps {
   photoboxSelected: boolean;
   onPhotoboxChange: (value: boolean) => void;
+  /** Finder pre-select (§8.4): { area, nonce } | null. Consumed once. */
+  areaPreset?: { area: string; nonce: number } | null;
+  onAreaPresetConsumed?: () => void;
 }
 
 function toISODate(d: Date): string {
@@ -41,7 +45,12 @@ function formatDateID(iso: string): string {
  * previewed on the page (the photobox price renders exactly once,
  * in Photobox).
  */
-export default function Booking({ photoboxSelected, onPhotoboxChange }: BookingProps) {
+export default function Booking({
+  photoboxSelected,
+  onPhotoboxChange,
+  areaPreset,
+  onAreaPresetConsumed,
+}: BookingProps) {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -51,6 +60,17 @@ export default function Booking({ photoboxSelected, onPhotoboxChange }: BookingP
   const [bigParty, setBigParty] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
+
+  /* Finder area pre-select (§8.4): fires once per preset (nonce), only
+     for values that are already in AREAS — anything else is ignored
+     entirely, so a bad preset can never invent an area. */
+  useEffect(() => {
+    if (!areaPreset) return;
+    if ((AREAS as readonly string[]).includes(areaPreset.area)) {
+      setArea(areaPreset.area);
+      onAreaPresetConsumed?.();
+    }
+  }, [areaPreset, onAreaPresetConsumed]);
 
   const todayISO = useMemo(() => toISODate(new Date()), []);
 
@@ -271,30 +291,47 @@ export default function Booking({ photoboxSelected, onPhotoboxChange }: BookingP
           </div>
 
           {error && (
-            <p role="alert" className="rounded-sm border border-awning px-3 py-2 text-base font-medium text-awning">
+            <p
+              key={error}
+              role="alert"
+              className="anim-rise-200 rounded-sm border border-awning px-3 py-2 text-base font-medium text-awning"
+            >
               {error}
             </p>
           )}
 
           <div className="flex flex-col gap-3 pt-1 sm:flex-row">
-            <a
+            <MagneticButton
               href={SITE_DATA.instagramUrl}
               target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block rounded-sm bg-ink px-6 py-3 text-center text-base font-semibold text-paper transition-opacity hover:opacity-90"
+              variant="outline"
+              size="lg"
+              strength={0.3}
+              labelStrength={0.15}
+              spotlight={false}
+              className="border-ink bg-paper text-ink backdrop-blur-none hover:bg-ink hover:text-paper focus-visible:ring-0"
             >
               DM Instagram {SITE_DATA.instagramHandle}
-            </a>
-            <button
+            </MagneticButton>
+            <MagneticButton
               type="button"
               onClick={copyMessage}
-              className="rounded-sm border border-ink px-6 py-3 text-base font-semibold transition-colors hover:bg-ink hover:text-paper"
+              variant="ghost"
+              size="lg"
+              strength={0.3}
+              labelStrength={0.15}
+              spotlight={false}
+              className={
+                copied
+                  ? "whitespace-nowrap border border-joglo bg-joglo text-paper focus-visible:ring-0"
+                  : "whitespace-nowrap border border-ink text-ink hover:bg-ink hover:text-paper focus-visible:ring-0"
+              }
             >
               {copied ? "Tersalin" : "Salin Pesan Reservasi"}
-            </button>
+            </MagneticButton>
           </div>
           {copied && (
-            <p className="text-sm text-muted">
+            <p key="copy-success" className="anim-rise-200 text-sm text-muted">
               Pesan tersalin — tempel di DM Instagram {SITE_DATA.instagramHandle}.
             </p>
           )}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { SITE_DATA } from "@/lib/site-data";
 import { BlurText } from "@/components/blur-text";
+import { MagneticButton } from "@/components/magnetic-button";
 
 interface PhotoboxProps {
   onAddToBooking: () => void;
@@ -39,13 +40,18 @@ export default function Photobox({ onAddToBooking }: PhotoboxProps) {
             <p className="mt-4 max-w-[55ch] text-base leading-relaxed text-muted">
               {box.sourceLine}
             </p>
-            <a
+            <MagneticButton
               href="#booking"
               onClick={onAddToBooking}
-              className="mt-8 inline-block rounded-sm bg-awning px-7 py-3.5 text-base font-semibold text-paper transition-opacity hover:opacity-90"
+              variant="solid"
+              size="lg"
+              strength={0.35}
+              labelStrength={0.15}
+              spotlight={false}
+              className="mt-8 bg-awning text-paper focus-visible:ring-0"
             >
               Tambah ke reservasi
-            </a>
+            </MagneticButton>
           </div>
 
           <div className="grid grid-cols-2 gap-4 sm:gap-6">

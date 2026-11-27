@@ -94,6 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Lewati ke konten
         </a>
+        <div className="grain-overlay" aria-hidden="true" />
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { SITE_DATA } from "@/lib/site-data";
+import { MagneticButton } from "@/components/magnetic-button";
 
 /**
  * Visit / Footer — Ink ground, last element on the page, no trailing gap.
@@ -41,14 +42,19 @@ export default function Footer() {
             <p className="mt-2 text-base text-paper/70">
               Juga dikenal sebagai {SITE_DATA.alsoKnownAs}.
             </p>
-            <a
+            <MagneticButton
               href={SITE_DATA.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-block rounded-sm bg-paper px-6 py-3 text-base font-semibold text-ink transition-opacity hover:opacity-90"
+              variant="solid"
+              size="lg"
+              strength={0.35}
+              labelStrength={0.15}
+              spotlight={false}
+              className="mt-6 bg-paper text-ink focus-visible:ring-0"
             >
               Ikuti {SITE_DATA.instagramHandle}
-            </a>
+            </MagneticButton>
           </div>
 
           <div>

@@ -53,7 +53,7 @@ export default function JourneyWalk() {
               aria-current={active === i ? "true" : undefined}
               aria-label={`Pemberhentian ${beat.step}: ${beat.title}`}
               onClick={() => goTo(i)}
-              className={`flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center whitespace-nowrap overflow-visible rounded-full border px-4 py-2 font-display text-lg font-semibold transition-colors ${
+              className={`flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center whitespace-nowrap overflow-visible rounded-full border px-4 py-2 font-display text-lg font-semibold transition-colors active:scale-[0.97] ${
                 active === i
                   ? "border-joglo bg-joglo text-paper"
                   : "border-line bg-paper text-ink hover:border-joglo"

@@ -12,7 +12,8 @@
 
 import * as React from "react";
 import { type ClassValue, clsx } from "clsx";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
+import { useReducedMotion } from "@/lib/motion";
 import { twMerge } from "tailwind-merge";
 
 // cn(): merges Tailwind classes, later ones win.
@@ -90,7 +91,17 @@ export function AnnotationText({
 }: AnnotationTextProps) {
   const ref = React.useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.8 });
-  const still = useReducedMotion();
+  // SSR NOTE (fix round 1): same mounted gate as BlurText — first client
+  // render must match the SSR HTML, so the real hook value only applies
+  // after hydration. `initial` stays the animated value unconditionally
+  // (SSR-identical); under reduced-motion the mark jumps to fully drawn
+  // via `animate` with a zero-duration transition instead.
+  const stillRaw = useReducedMotion();
+  const [mounted, setMounted] = React.useState(false);
+  React.useLayoutEffect(() => {
+    setMounted(true);
+  }, []);
+  const still = mounted && stillRaw;
   const [box, setBox] = React.useState({ w: 0, h: 0 });
 
   React.useLayoutEffect(() => {
@@ -119,9 +130,9 @@ export function AnnotationText({
             strokeWidth={strokeWidth}
             strokeLinecap="round"
             strokeLinejoin="round"
-            initial={still ? false : { pathLength: 0, opacity: 0 }}
-            animate={inView ? { pathLength: 1, opacity: 1 } : undefined}
-            transition={{ pathLength: { duration, ease: [0.65, 0, 0.35, 1], delay }, opacity: { duration: 0.01, delay } }}
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={still || inView ? { pathLength: 1, opacity: 1 } : undefined}
+            transition={{ pathLength: { duration: still ? 0 : duration, ease: [0.65, 0, 0.35, 1], delay: still ? 0 : delay }, opacity: { duration: 0.01, delay: still ? 0 : delay } }}
           />
         </svg>
       )}

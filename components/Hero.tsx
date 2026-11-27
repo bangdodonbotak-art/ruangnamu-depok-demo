@@ -5,6 +5,7 @@ import Image from "next/image";
 import { SITE_DATA } from "@/lib/site-data";
 import { shouldPlayFilm } from "@/lib/motion";
 import { AnnotationText } from "@/components/annotation-text";
+import { MagneticButton } from "@/components/magnetic-button";
 import OpenNowChip from "@/components/OpenNowChip";
 
 const FILM_SRC = "/media/hero/hero-film-9x16.mp4";
@@ -141,12 +142,17 @@ export default function Hero() {
         </h1>
         <p className="body-lg mt-4 max-w-[55ch] text-paper/90 lg:mt-6">{SITE_DATA.heroSubtext}</p>
         <div className="mt-6 lg:mt-8">
-          <a
+          <MagneticButton
             href="#booking"
-            className="inline-block rounded-sm bg-joglo px-7 py-3.5 text-base font-semibold text-paper transition-opacity hover:opacity-90"
+            variant="solid"
+            size="lg"
+            strength={0.35}
+            labelStrength={0.15}
+            spotlight={false}
+            className="bg-joglo text-paper focus-visible:ring-0"
           >
             {SITE_DATA.primaryCtaLabel}
-          </a>
+          </MagneticButton>
         </div>
         <div className="mt-4">
           <OpenNowChip variant="onFilm" />

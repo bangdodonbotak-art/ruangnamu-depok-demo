@@ -52,6 +52,10 @@ export default function Spaces() {
                 )}
               </div>
               <h3 className="mt-4 font-display text-2xl font-semibold">{space.title}</h3>
+              <span
+                aria-hidden="true"
+                className="mt-2 block h-0.5 w-10 origin-left scale-x-0 bg-joglo transition-transform duration-300 ease-out group-hover:scale-x-100"
+              />
               <p className="mt-1 text-base leading-relaxed text-muted">{space.detail}</p>
             </article>
           ))}

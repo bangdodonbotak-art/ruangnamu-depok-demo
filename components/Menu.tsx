@@ -18,7 +18,7 @@ export default function Menu() {
   }
 
   return (
-    <section id="menu" aria-label="Menu" className="section-pad bg-paper">
+    <section id="menu" aria-label="Menu" className="section-pad bg-paper-deep">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="max-w-2xl">
           <BlurText
@@ -70,14 +70,21 @@ export default function Menu() {
 
         <ul className="mt-12 divide-y divide-line border-y border-line">
           {rest.map((item) => (
-            <li key={item.id} className="grid gap-1 py-5 sm:grid-cols-[1fr_auto] sm:items-start sm:gap-6">
+            <li
+              key={item.id}
+              className="group grid gap-1 py-5 transition-colors duration-200 hover:bg-paper sm:grid-cols-[1fr_auto] sm:items-start sm:gap-6"
+            >
               <div>
-                <h3 className="font-display text-2xl font-semibold">{item.name}</h3>
+                <h3 className="font-display text-2xl font-semibold transition-transform duration-200 group-hover:translate-x-1">
+                  {item.name}
+                </h3>
                 <p className="mt-1 max-w-[60ch] text-base leading-relaxed text-muted">
                   {item.description}
                 </p>
               </div>
-              <p className="text-sm font-medium text-wood">{item.basisText}</p>
+              <p className="text-sm font-medium text-wood transition-colors duration-200 group-hover:text-joglo">
+                {item.basisText}
+              </p>
             </li>
           ))}
         </ul>

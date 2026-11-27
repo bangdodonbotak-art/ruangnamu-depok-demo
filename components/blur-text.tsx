@@ -12,7 +12,8 @@
 
 import * as React from "react";
 import { type ClassValue, clsx } from "clsx";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
+import { useReducedMotion } from "@/lib/motion";
 import { twMerge } from "tailwind-merge";
 
 // cn(): merges Tailwind classes, later ones win.
@@ -75,7 +76,19 @@ export const BlurText = React.forwardRef<HTMLElement, BlurTextProps>(function Bl
   React.useImperativeHandle(forwardedRef, () => ref.current as HTMLElement);
   const seen = useInView(ref, { once: true, amount: 0.4 });
   const inView = trigger === "mount" || seen;
-  const still = useReducedMotion();
+  // SSR NOTE (fix round 1): the first client render must match the SSR
+  // HTML (server renders with reduced-motion off), so the real hook value
+  // only applies after hydration — via the mounted gate, flipped in a
+  // layout effect (before paint, no flash, no hydration mismatch).
+  // `initial` stays the animated value unconditionally (SSR-identical);
+  // under reduced-motion the spans jump to their final state via
+  // `animate` with a zero-duration transition instead.
+  const stillRaw = useReducedMotion();
+  const [mounted, setMounted] = React.useState(false);
+  React.useLayoutEffect(() => {
+    setMounted(true);
+  }, []);
+  const still = mounted && stillRaw;
   const pieces = by === "word" ? text.split(" ") : Array.from(text);
   const offset = direction === "up" ? "0.35em" : "-0.35em";
 
@@ -86,9 +99,9 @@ export const BlurText = React.forwardRef<HTMLElement, BlurTextProps>(function Bl
           <motion.span
             aria-hidden
             className="inline-block whitespace-pre will-change-transform"
-            initial={still ? false : { opacity: 0, y: offset, filter: `blur(${blur}px)` }}
-            animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : undefined}
-            transition={{ duration, ease: [0.22, 1, 0.36, 1], delay: delay + i * stagger }}
+            initial={{ opacity: 0, y: offset, filter: `blur(${blur}px)` }}
+            animate={still || inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : undefined}
+            transition={{ duration: still ? 0 : duration, ease: [0.22, 1, 0.36, 1], delay: still ? 0 : delay + i * stagger }}
           >
             {piece}
           </motion.span>
